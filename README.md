@@ -11,6 +11,7 @@ ingredients and instructions following the provided [recipe.json](recipe.json) J
 ```
 python parser.py recipe.json "Feu una pasta amb la farina, la llet, el llevat, els rovells d’ou, l’anís i 150 g de sucre, fins que tingui una textura que cobreixi bé els trossos de poma. Deixeu-la reposar 30 minuts. Afegiu-hi les clares a punt de neu. Emboliqueu les rodanxes de poma amb la pasta i fregiu-les amb abundant oli calent. Traieu els bunyols quan siguin rossos i tireu-hi pel damunt el sucre restant." 
 ```
+(The text is from this amazing ["apple fritters" Catalan recipe](https://www.cuinacatalana.eu/ca/pag/receptes/?id=153) :))
 should return something like this:
 ```json
 {
