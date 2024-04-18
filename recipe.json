@@ -1,0 +1,150 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "description": "Schema representing a recipe as a directed acyclic graph (DAG), with nodes for ingredients and steps. Each step must consist of a single atomic preparation action and each ingredient of a single, unprepared ingredient.",
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string",
+      "description": "The name of the dish being prepared."
+    },
+    "language": {
+      "type": "string",
+      "description": "Original language of the recipe."
+    },
+    "nodes": {
+      "type": "array",
+      "description": "List of all nodes in the recipe graph, representing either unprepared ingredients or preparation steps.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Unique identifier for the node."
+          },
+          "type": {
+            "type": "string",
+            "enum": ["ingredient", "step"],
+            "description": "Type of node, which can be either 'ingredient' for raw inputs or 'step' for actions performed."
+          },
+          "next_steps": {
+            "type": ["array", "null"],
+            "items": {
+              "type": "string"
+            },
+            "description": "Array of IDs that point to the next step in the recipe. If the node is an ingredient, the next step is the first time the ingredient is used. It can be Null if it is the last step."
+          }
+        },
+        "required": ["id", "type", "next_steps"],
+        "if": {
+          "properties": {
+            "type": { "const": "step" }
+          }
+        },
+        "then": {
+          "properties": {
+            "description": {
+              "type": "string",
+              "description": "Description of what the step entails, in English."
+            },
+            "action": {
+              "type": "string",
+              "enum": [
+                  "mix",
+                  "stuff",
+                  "coat",
+                  "fill",
+                  "slice",
+                  "cut",
+                  "dice",
+                  "brown",
+                  "sauté",
+                  "boil",
+                  "fry",
+                  "grill",
+                  "bake",
+                  "roast",
+                  "steam",
+                  "blanch",
+                  "poach",
+                  "simmer",
+                  "broil",
+                  "marinate",
+                  "knead",
+                  "whisk",
+                  "blend",
+                  "chop",
+                  "mince",
+                  "shred",
+                  "julienne",
+                  "braise",
+                  "stew",
+                  "caramelize",
+                  "sear",
+                  "deglaze",
+                  "temper",
+                  "infuse",
+                  "zest",
+                  "peel",
+                  "mash",
+                  "fold",
+                  "beat",
+                  "glaze",
+                  "garnish",
+                  "flambé",
+                  "grate",
+                  "fillet",
+                  "soak",
+                  "other"
+              ],
+              "description": "The specific cooking or preparation action involved in this step."
+            },
+            "description_raw": {
+              "type": "string",
+              "description": "The raw, unedited instruction text as it might appear in the original recipe."
+            },
+            "duration": {
+              "type": ["integer", "null"],
+              "description": "Estimated duration in minutes for this step, if avaiable."
+            }
+          },
+          "required": ["description_raw", "description", "action"]
+        },
+        "else": {
+          "properties": {
+            "name_en": {
+              "type": "string",
+              "description": "Name of the ingredient, in English."
+            },
+            "quantity": {
+              "type": ["number", "null"],
+              "description": "Quantity of the ingredient required for the recipe."
+            },
+            "quantity_unit": {
+              "type": ["string", "null"],
+              "enum": ["gr", "kg", "ml", "cl", "l", "count", "tsp", "tbsp", "cup", "oz", null],
+              "description": "Unit of measurement for the quantity."
+            },
+            "compatible_diets": {
+              "type": ["array", "null"],
+              "items": {
+                "type": "string",
+                "enum": ["vegan", "vegetarian", "gluten-free", "dairy-free", "nut-free", "paleo", "keto", "pescatarian"]
+              },
+              "description": "List of diets compatible with this ingredient."
+            },
+            "allergens": {
+              "type": ["array", "null"],
+              "items": {
+                "type": "string",
+                "enum": ["gluten", "nuts", "dairy", "soy", "egg", "shellfish", "fish", "allium", null]
+              },
+              "description": "List of potential allergens contained in the ingredient."
+            }
+          },
+          "required": ["name_en"]
+        }
+      }
+    }
+  },
+  "required": ["name", "nodes"]
+}
